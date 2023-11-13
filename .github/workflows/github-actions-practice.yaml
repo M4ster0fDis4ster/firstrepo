@@ -22,8 +22,8 @@ jobs:
         #     pip install editorconfig-checker
         #     editorconfig-checker
 
-#       - name: Run Python linter - pylint
-#         uses: cclauss/GitHub-Action-for-pylint@0.7.0
+      - name: Run Python linter - pylint
+        uses: cclauss/GitHub-Action-for-pylint@0.7.0
 
 #       - name: Run Python linter - black
 #         uses: psf/black@stable

@@ -21,13 +21,14 @@ jobs:
         # run: |
         #     pip install editorconfig-checker
         #     editorconfig-checker
-
+    pylint:
       - name: Run Python linter - pylint
         uses: cclauss/GitHub-Action-for-pylint@0.7.0
 
-#       - name: Run Python linter - black
-#         uses: psf/black@stable
-
+    black:
+      - name: Run Python linter - black
+        uses: psf/black@stable
+    markdown:
 #       - name: Run markdown linter
 #         uses: nosborn/github-action-markdown-cli@v3.3.0
 #         with:

@@ -16,11 +16,11 @@ jobs:
       
       - name: Check .editorconfig
         uses: actions/setup-python@v3
-        with:
-            python-version:3.x
-        run: |
-            pip install editorconfig-checker
-            editorconfig-checker
+        # with:
+        #     python-version:3.x
+        # run: |
+        #     pip install editorconfig-checker
+        #     editorconfig-checker
 
       - name: Run Python linter - pylint
         uses: cclauss/GitHub-Action-for-pylint@0.7.0

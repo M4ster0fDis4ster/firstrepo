@@ -23,7 +23,7 @@ jobs:
         #     editorconfig-checker
 pylint:
     runs-on: ubuntu-latest
-      steps:
+    steps:
       - uses: actions/checkout@v4
       - name: Run Python linter - pylint
         uses: cclauss/GitHub-Action-for-pylint@0.7.0

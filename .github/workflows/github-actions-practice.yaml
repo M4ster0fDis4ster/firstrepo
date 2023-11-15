@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  build:
+  edidotconfig:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,14 +21,40 @@ jobs:
         # run: |
         #     pip install editorconfig-checker
         #     editorconfig-checker
-    pylint:
+pylint:
+    runs-on: ubuntu-latest
       - name: Run Python linter - pylint
         uses: cclauss/GitHub-Action-for-pylint@0.7.0
 
     black:
-      - name: Run Python linter - black
+      steps:
         uses: psf/black@stable
-    markdown:
+    
+  markdown:
+    runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - name: Run markdown linter
+          uses: nosborn/github-action-markdown-cli@v3.3.0
+          with:
+            files: README.md
+
+    - name: Lint changelog file
+      uses: docker://avtodev/markdown-lint:v1 # fastest way
+      with:
+        rules: '/lint/rules/changelog.js'
+        config: '/lint/config/changelog.yml'
+        args: './CHANGELOG.md'
+        ignore: './one_file.md ./another_file.md' # multiple files must be separated with single space
+
+    # Or using current repository as action:
+
+    - name: Lint changelog file
+      uses: avto-dev/markdown-lint@v1
+      with:
+        rules: '/lint/rules/changelog.js'
+        config: '/lint/config/changelog.yml'
+        args: './CHANGELOG.md'
 #       - name: Run markdown linter
 #         uses: nosborn/github-action-markdown-cli@v3.3.0
 #         with:

@@ -33,7 +33,7 @@ black:
     steps:
       - name: Run Python linter - black
         uses: psf/black@stable
-    
+        
   markdown:
     runs-on: ubuntu-latest
     steps:

@@ -28,9 +28,9 @@ jobs:
 #       - name: Run Python linter - pylint
 #         uses: cclauss/GitHub-Action-for-pylint@0.7.0
 
-code Lint and Style:
-      - uses: actions/setup-python@v3
-          with:
+      - name: Code Lint and Style
+      uses: actions/setup-python@v3
+      with:
         python-version: 3.x
       run: |
         pip install pylint black

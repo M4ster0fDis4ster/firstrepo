@@ -30,13 +30,13 @@ pylint:
 
 black:
     runs-on: ubuntu-latest
-      steps:
+    steps:
       - name: Run Python linter - black
         uses: psf/black@stable
     
   markdown:
     runs-on: ubuntu-latest
-      steps:
+    steps:
         - uses: actions/checkout@v4
         - name: Run markdown linter
           uses: nosborn/github-action-markdown-cli@v3.3.0

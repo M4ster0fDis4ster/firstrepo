@@ -47,11 +47,11 @@ jobs:
                     python-version: 3.12
             
             - name: Install dependencies
-              working-directory: ./Containers-python-app/app
+              working-directory: ./Containers-python-app
               run: python -m pip install -r requirements.txt
 
             - name: Run tests
-              working-directory: ./Containers-python-app/app
+              working-directory: ./Containers-python-app
               run: python -m unittest app_test.py
 #   build-and-push-image:
 #     runs-on: ubuntu-latest

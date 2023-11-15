@@ -7,14 +7,36 @@ on:
 
 jobs:
 
-  edidotconfig:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    edidotconfig:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
      
-      - name: Check .editorconfig
-        uses: actions/setup-python@v3
+            - name: Check .editorconfig
+              uses: actions/setup-python@v3
+
+    pylint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Run Python linter - pylint
+              uses: cclauss/GitHub-Action-for-pylint@0.7.0
+    black:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Run Python linter - black
+              uses: psf/black@stable
+
+    markdown:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Run markdown linter
+              uses: nosborn/github-action-markdown-cli@v3.3.0
+              with:
+                files: README.md 
 
 #   build-and-push-image:
 #     runs-on: ubuntu-latest

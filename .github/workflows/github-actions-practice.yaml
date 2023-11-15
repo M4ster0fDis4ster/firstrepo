@@ -28,22 +28,12 @@ jobs:
 #       - name: Run Python linter - pylint
 #         uses: cclauss/GitHub-Action-for-pylint@0.7.0
 
-      - name: Code Lint and Style
-      uses: actions/setup-python@v3
-      with:
-        python-version: 3.x
-      run: |
-        pip install pylint black
-        pylint app_directory
-        black --check app_directory
-markdown:
-    runs-on: ubuntu-latest
+  pylint:
+  runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run markdown linter
-      - uses: nosborn/github-action-markdown-cli@v3.3.0
-          with:
-          files: README.md
+      - name: Run Python linter - pylint
+        uses: cclauss/GitHub-Action-for-pylint@0.7.0
 
 #       - name: Run markdown linter
 #         uses: nosborn/github-action-markdown-cli@v3.3.0

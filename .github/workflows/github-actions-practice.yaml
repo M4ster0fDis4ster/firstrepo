@@ -28,20 +28,22 @@ pylint:
       - name: Run Python linter - pylint
         uses: cclauss/GitHub-Action-for-pylint@0.7.0
 
-black:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run Python linter - black
-        uses: psf/black@stable
-
+code Lint and Style:
+      - uses: actions/setup-python@v3
+          with:
+        python-version: 3.x
+      run: |
+        pip install pylint black
+        pylint app_directory
+        black --check app_directory
 markdown:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v4
-        - name: Run markdown linter
-          uses: nosborn/github-action-markdown-cli@v3.3.0
+      - uses: actions/checkout@v4
+      - name: Run markdown linter
+      - uses: nosborn/github-action-markdown-cli@v3.3.0
           with:
-            files: README.md
+          files: README.md
 
 #       - name: Run markdown linter
 #         uses: nosborn/github-action-markdown-cli@v3.3.0

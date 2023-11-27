@@ -54,7 +54,7 @@ jobs:
               working-directory: ./Containers-python-app/app
               run: python -m unittest app_test.py
 
-    gitleaks check:
+    gitleaks_check:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4

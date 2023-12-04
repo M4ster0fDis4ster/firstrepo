@@ -70,7 +70,16 @@ jobs:
                 fetch-depth: 0
             - uses: AppThreat/sast-scan-action@master
               with:
-                type: "python"      
+                type: "python"
+
+    sca:
+        run-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@master
+            - name: Run Snyk to check for vulnerabilities
+              uses: snyk/actions/node@master
+              env:
+                SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
     
 

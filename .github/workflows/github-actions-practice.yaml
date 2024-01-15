@@ -79,14 +79,27 @@ jobs:
     sca:
         needs: [test, sonarcloud]
         runs-on: ubuntu-latest
+        # steps:
+        #     - uses: actions/checkout@v4
+        #     - name: Run Snyk to check for vulnerabilities
+        #       uses: snyk/actions/python-3.10@master
+        #       env:
+        #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        #       with:
+        #         args: --severity-threshold=high
         steps:
-            - uses: actions/checkout@v4
-            - name: Run Snyk to check for vulnerabilities
-              uses: snyk/actions/python-3.10@master
-              env:
-                SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-              with:
-                args: --severity-threshold=high
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Install Snyk CLI
+              run: |
+                npm install -g snyk
+
+            - name: Authenticate Snyk
+              run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+            - name: Run Snyk Test
+              run: snyk test
     
     build-and-push-image:
         runs-on: ubuntu-latest

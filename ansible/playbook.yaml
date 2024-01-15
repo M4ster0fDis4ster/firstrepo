@@ -1,0 +1,41 @@
+- hosts: localhost
+  gather_facts: no
+  become: no
+
+  vars:
+    app_host: "0.0.0.0"
+    app_port: "5000"
+    image_name: "m4ster0fdis4ster/devops-telerik"
+    image_tag: "v1"
+    listen_port: "5000"
+
+  tasks:
+    - name: Block
+      block:
+        - name: Create code directory
+          file:
+            dest: code/
+            state: directory
+
+        - name: Get latest application code from Github
+          git:
+            repo: git@github.com:M4ster0fDis4ster/devops-programme.git
+            version: main
+            dest: code/
+
+        - name: Install Python libraries
+          pip:
+            chdir: code/Containers-python-app
+            requirements: "requirements.txt"
+            state: present
+
+        - name: Start the Flask app
+          shell: "flask run -h {{ app_host }} -p {{ app_port }} &"
+          args:
+            chdir: code/Containers-python-app/app
+
+            rescue:
+              - name: Delete code directory
+                file:
+                  dest: code/
+                  state: absent

@@ -40,6 +40,7 @@ jobs:
     
     test:
         runs-on: ubuntu-latest
+        needs: [editorconfig, pylint, black, markdown]
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-python@v4
@@ -55,6 +56,7 @@ jobs:
               run: python -m unittest app_test.py
 
     gitleaks_check:
+        needs: [test, sonarcloud]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -63,6 +65,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     sonarcloud:
+        needs: [editorconfig, pylint, black, markdown]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -73,11 +76,12 @@ jobs:
                 type: "python"
 
     sca:
+        needs: [test, sonarcloud]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
             - name: Run Snyk to check for vulnerabilities
-              uses: snyk/actions/python-3.10@master
+              uses: snyk/actions/python@master
               env:
                 SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
               with:
@@ -85,6 +89,7 @@ jobs:
     
     build-and-push-image:
         runs-on: ubuntu-latest
+        needs: [gitleaks_check, sca]
 
         steps:
             - name: Checkout repository

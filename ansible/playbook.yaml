@@ -1,41 +1,50 @@
 - hosts: localhost
-  gather_facts: no
   become: no
 
   vars:
-    app_host: "0.0.0.0"
-    app_port: "5000"
-    image_name: "m4ster0fdis4ster/devops-telerik"
-    image_tag: "v1"
-    listen_port: "5000"
+    image_name: "m4ster0fdis4ster/test-python-app"
+    image_tag: "v0.2"
+    application_directory: "/tmp/app"
+
 
   tasks:
-    - name: Block
-      block:
-        - name: Create code directory
-          file:
-            dest: code/
-            state: directory
+    - name: Create {{ application_directory }} directory
+      file:
+        name: "{{ application_directory }}"
+        state: directory
+        mode: 0755
 
-        - name: Get latest application code from Github
-          git:
-            repo: git@github.com:M4ster0fDis4ster/devops-programme.git
-            version: main
-            dest: code/
+    - name: Checkout repository
+      git:
+        repo: git@github.com:M4ster0fDis4ster/devops-programme.git
+        dest: "{{ application_directory }}"
+        version: main
+        update: yes
 
-        - name: Install Python libraries
-          pip:
-            chdir: code/Containers-python-app
-            requirements: "requirements.txt"
-            state: present
+    - name: Build Docker image
+      docker_image:
+        build:
+          path: "{{ application_directory }}"
+        name: "{{ image_name }}"
+        tag: "{{ image_tag }}"
+        push: true
+        source: build
+        docker_host: "unix:///var/run/docker.sock"
+        state: present
 
-        - name: Start the Flask app
-          shell: "flask run -h {{ app_host }} -p {{ app_port }} &"
-          args:
-            chdir: code/Containers-python-app/app
-
-            rescue:
-              - name: Delete code directory
-                file:
-                  dest: code/
-                  state: absent
+    - name: Run the built Docker image
+      docker_container:
+        name: "python-web"
+        image: "{{ image_name }}:{{ image_tag }}"
+        state: started
+        auto_remove: yes
+        ports:
+          - "5001:5001"
+        env:
+          PORT: "5001"
+        healthcheck:
+          test: ["CMD", "curl", "--fail", "http://localhost:5001"]
+          interval: 10s
+          retries: 3
+          start_period: 5s
+        docker_host: "unix:///var/run/docker.sock"

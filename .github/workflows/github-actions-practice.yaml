@@ -76,30 +76,17 @@ jobs:
               with:
                 type: "python"
 
-    # sca:
-    #     needs: [test, sonarcloud]
-    #     runs-on: ubuntu-latest
-    #     # steps:
-    #     #     - uses: actions/checkout@v4
-    #     #     - name: Run Snyk to check for vulnerabilities
-    #     #       uses: snyk/actions/python-3.10@master
-    #     #       env:
-    #     #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-    #     #       with:
-    #     #         args: --severity-threshold=high
-    #     steps:
-    #         - name: Checkout code
-    #           uses: actions/checkout@v2
-
-    #         - name: Install Snyk CLI
-    #           run: |
-    #             npm install -g snyk
-
-    #         - name: Authenticate Snyk
-    #           run: snyk auth ${{ secrets.SNYK_TOKEN }}
-
-    #         - name: Run Snyk Test
-    #           run: snyk test
+    sca:
+        needs: [test, sonarcloud]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Run Snyk to check for vulnerabilities
+              uses: snyk/actions/python-3.10@master
+              env:
+                SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+              with:
+                args: --severity-threshold=high
     
     build-and-push-image:
         runs-on: ubuntu-latest
@@ -125,7 +112,7 @@ jobs:
             - name: Run Trivy vulnerability scanner
               uses: aquasecurity/trivy-action@master
               with:
-                image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}'
+                image-ref: ${{ steps.build.outputs.imageid }}
                 format: 'table'
                 exit-code: '1'
                 ignore-unfixed: true
@@ -152,12 +139,3 @@ jobs:
                 push: true
                 tags: ${{ steps.meta.outputs.tags }}
                 labels: ${{ steps.meta.outputs.labels }}
-
-#       - name: Build and push Docker image
-#         run: |
-#           docker build -t m4ster0fdis4ster/nginx-homework:latest .
-#           docker push m4ster0fdis4ster/nginx-homework:latest
-#         env:
-#           DOCKER_BUILDKIT: 1
-
-
